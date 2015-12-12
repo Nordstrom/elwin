@@ -1,0 +1,24 @@
+{
+ "op": "seq",
+ "seq": [
+  {
+   "op": "set",
+   "var": "compliment",
+   "value": {
+    "choices": {
+     "op": "array",
+     "values": [
+      "is rad",
+      "is pretty",
+      "sings well"
+     ]
+    },
+    "unit": {
+     "op": "get",
+     "var": "userid"
+    },
+    "op": "uniformChoice"
+   }
+  }
+ ]
+}

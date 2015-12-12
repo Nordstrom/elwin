@@ -1,0 +1,23 @@
+{
+ "op": "seq",
+ "seq": [
+  {
+   "op": "set",
+   "var": "name",
+   "value": {
+    "choices": {
+     "op": "array",
+     "values": [
+      "Frank",
+      "Fred"
+     ]
+    },
+    "unit": {
+     "op": "get",
+     "var": "userid"
+    },
+    "op": "uniformChoice"
+   }
+  }
+ ]
+}
