@@ -8,91 +8,32 @@
     "choices": {
      "op": "array",
      "values": [
-      "control",
-      "wishlistDarkBorder",
-      "wishlistLightBorder"
-     ]
-    },
-    "weights": {
-     "op": "array",
-     "values": [
-      {
-       "op": "/",
-       "left": 1,
-       "right": 11
-      },
-      {
-       "op": "/",
-       "left": 5,
-       "right": 11
-      },
-      {
-       "op": "/",
-       "left": 5,
-       "right": 11
-      }
+      "control"
      ]
     },
     "unit": {
      "op": "get",
      "var": "userid"
     },
-    "op": "weightedChoice"
+    "op": "uniformChoice"
    }
   },
   {
-   "op": "cond",
-   "cond": [
-    {
-     "if": {
-      "op": "equals",
-      "left": {
-       "op": "get",
-       "var": "buttonStyle"
-      },
-      "right": "control"
-     },
-     "then": {
-      "op": "seq",
-      "seq": [
-       {
-        "op": "set",
-        "var": "buttonLayout",
-        "value": "control"
-       }
-      ]
-     }
+   "op": "set",
+   "var": "buttonLayout",
+   "value": {
+    "choices": {
+     "op": "array",
+     "values": [
+      "control"
+     ]
     },
-    {
-     "if": true,
-     "then": {
-      "op": "seq",
-      "seq": [
-       {
-        "op": "set",
-        "var": "buttonLayout",
-        "value": {
-         "choices": {
-          "op": "array",
-          "values": [
-           "addToBagLeft",
-           "addToBagRight",
-           "addToBagTop",
-           "addToBagLeftLarge",
-           "addToBagRightLarge"
-          ]
-         },
-         "unit": {
-          "op": "get",
-          "var": "userid"
-         },
-         "op": "uniformChoice"
-        }
-       }
-      ]
-     }
-    }
-   ]
+    "unit": {
+     "op": "get",
+     "var": "userid"
+    },
+    "op": "uniformChoice"
+   }
   }
  ]
 }
