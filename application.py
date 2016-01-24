@@ -5,18 +5,22 @@ from experiments import Experiments
 storage = Storage()
 experiments = Experiments()
 
+# Create the application, elastic beanstalk expects the name "application"
 application = Flask(__name__)
 
-# return experiment with params
+# Return the parameters relevant to a specific experiment
 @application.route("/<teamName>/<experimentName>/<userId>")
-def get_response(teamName, experimentName, userId):
-    outDict = {}
+def get__experiment_response(teamName, experimentName, userId):
 
+    # Get the experiment definition from storage
     script = storage.get_experiment_def(experimentName)
-    experimentParams = experiments.get_experiment_params(experimentName, script, userId = userId)
-    outDict[experimentName] = experimentParams
 
-    print "returning " + str(outDict)
+    # Get the params for the instance of the experiment
+    experimentParams = experiments.get_experiment_params(experimentName, script, userId = userId)
+
+    # Build the response object and return it as json
+    outDict = {}
+    outDict[experimentName] = experimentParams
     return jsonify(outDict)
 
 # run the app.
