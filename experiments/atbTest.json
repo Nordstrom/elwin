@@ -16,9 +16,21 @@
     "weights": {
      "op": "array",
      "values": [
-      0.9,
-      0.05,
-      0.05
+      {
+       "op": "/",
+       "left": 1,
+       "right": 3
+      },
+      {
+       "op": "/",
+       "left": 1,
+       "right": 3
+      },
+      {
+       "op": "/",
+       "left": 1,
+       "right": 3
+      }
      ]
     },
     "unit": {
