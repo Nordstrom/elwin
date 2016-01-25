@@ -1,4 +1,9 @@
-r": "buttonStyle",
+{
+ "op": "seq",
+ "seq": [
+  {
+   "op": "set",
+   "var": "buttonStyle",
    "value": {
     "choices": {
      "op": "array",
