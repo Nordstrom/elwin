@@ -1,0 +1,15 @@
+{
+    "segments": 1000,
+    "experimentOps": [
+        {
+            "experimentName": "atbTest2",
+            "op": "add",
+            "numSegments": 500
+        },
+        {
+            "experimentName": "bopusTest2",
+            "op": "add",
+            "numSegments": 500
+        }
+    ]
+}

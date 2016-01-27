@@ -22,8 +22,11 @@ class Storage:
 
                 namespaceData = json.loads(open(namespaceRoot + "/" + namespace).read())
 
-                self.namespaces[teamName] = {}
-                namespaceEntry = self.namespaces[teamName][namespaceName] = {}
+                teamNamespaces = self.namespaces.get(teamName, None)
+                if (teamNamespaces == None):
+                    teamNamespaces = self.namespaces[teamName] = {}
+
+                namespaceEntry = teamNamespaces[namespaceName] = {}
                 namespaceEntry["totalSegments"] = namespaceData["segments"]
 
                 availableSegments = range(namespaceData["segments"])
