@@ -20,7 +20,7 @@ def get_experiment_response(teamName, experimentName, userId):
 
 @application.route("/<teamName>/<userId>")
 def get_experiments_for_team(teamName, userId):
-    outDict = experiments.get_experiment_params_for_team(teamName, userId = userId)
+    outDict = experiments.get_experiment_params_for_team(teamName, userId)
     return jsonify(outDict)
 
 # run the app.

@@ -3,22 +3,22 @@
  "seq": [
   {
    "op": "set",
-   "var": "buttonStyle",
+   "var": "iconStyle",
    "value": {
     "choices": {
      "op": "array",
      "values": [
       "control",
-      "wishlistDarkBorder",
-      "wishlistLightBorder"
+      "hoverBox",
+      "magnifier"
      ]
     },
     "weights": {
      "op": "array",
      "values": [
-      0.9,
-      0.05,
-      0.05
+      0.3,
+      0.35,
+      0.35
      ]
     },
     "unit": {
@@ -36,7 +36,7 @@
       "op": "equals",
       "left": {
        "op": "get",
-       "var": "buttonStyle"
+       "var": "iconStyle"
       },
       "right": "control"
      },
@@ -45,7 +45,7 @@
       "seq": [
        {
         "op": "set",
-        "var": "buttonLayout",
+        "var": "galleryLayout",
         "value": "control"
        }
       ]
@@ -58,16 +58,14 @@
       "seq": [
        {
         "op": "set",
-        "var": "buttonLayout",
+        "var": "galleryLayout",
         "value": {
          "choices": {
           "op": "array",
           "values": [
-           "addToBagLeft",
-           "addToBagRight",
-           "addToBagTop",
-           "addToBagLeftLarge",
-           "addToBagRightLarge"
+           "alts",
+           "alts-colors",
+           "alts-colors-avail"
           ]
          },
          "unit": {

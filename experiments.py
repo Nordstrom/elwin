@@ -34,12 +34,15 @@ class Experiments:
         retDict = {}
 
         for namespaceName in teamNamespaces:
+
+            # Assign the user to a segment for this namespace
             a = Assignment(namespaceName)
             a.segment = RandomInteger(min=0,
                                     max=teamNamespaces[namespaceName]["totalSegments"] - 1,
                                     unit=userId)
 
-            print a.segment
+            # Not all segments in a namespace will have experiment assigned to them,
+            # So only get params for the user if they are given an experiment
             experimentName = teamNamespaces[namespaceName].get(a.segment, None)
             if (experimentName):
                 retDict[experimentName] = self.get_experiment_params(experimentName, userId=userId)

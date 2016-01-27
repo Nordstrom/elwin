@@ -4,12 +4,12 @@
         {
             "experimentName": "atbTest",
             "op": "add",
-            "numSegments": 500
+            "numSegments": 400
         },
         {
             "experimentName": "bopusTest",
             "op": "add",
-            "numSegments": 500
+            "numSegments": 400
         }
     ]
 }
