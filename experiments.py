@@ -1,13 +1,14 @@
 from planout.experiment import SimpleInterpretedExperiment
+from planout.assignment import *
+from storage import Storage
 
 # Thin layer in front of planout.
 class Experiments:
     def __init__(self):
-        # nothing right now
-        pass
+        self.storage = Storage()
 
     # Get the parameters of a planout experiment.
-    def get_experiment_params(self, experimentName, script, **units):
+    def get_experiment_params(self, experimentName, **units):
         # Create an experiment object with the inputs specific to the user.
         # TODO: investigate a pattern where a single experiment object is
         #       created which can generate the params using the units as input.
@@ -18,7 +19,7 @@ class Experiments:
         e.name = experimentName
 
         # Set the deserialized json definition of the experiment to be used.
-        e.script = script
+        e.script = self.storage.experiments.get(experimentName, None)
 
         # Exposure logging is currently disabled unti a logging system can be
         # implemented.
@@ -27,3 +28,20 @@ class Experiments:
         # Return the params of the experiment to the caller.
         params = e.get_params()
         return params
+
+    def get_experiment_params_for_team(self, teamName, userId):
+        teamNamespaces = self.storage.namespaces[teamName]
+        retDict = {}
+
+        for namespaceName in teamNamespaces:
+            a = Assignment(namespaceName)
+            a.segment = RandomInteger(min=0,
+                                    max=teamNamespaces[namespaceName]["totalSegments"] - 1,
+                                    unit=userId)
+
+            print a.segment
+            experimentName = teamNamespaces[namespaceName].get(a.segment, None)
+            if (experimentName):
+                retDict[experimentName] = self.get_experiment_params(experimentName, userId=userId)
+
+        return retDict
