@@ -25,4 +25,4 @@ def get_experiments_for_team(teamName, userId):
 
 # run the app.
 if __name__ == "__main__":
-    application.run(debug=True)
+    application.run()
