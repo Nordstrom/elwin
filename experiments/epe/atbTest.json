@@ -35,7 +35,7 @@
     },
     "unit": {
      "op": "get",
-     "var": "userid"
+     "var": "userId"
     },
     "op": "weightedChoice"
    }
@@ -84,7 +84,7 @@
          },
          "unit": {
           "op": "get",
-          "var": "userid"
+          "var": "userId"
          },
          "op": "uniformChoice"
         }
