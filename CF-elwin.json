@@ -1,0 +1,55 @@
+{
+  "Resources": {
+    "ElwinBeanstalkApp": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Sid": "",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Path": "/46111/CXAR/ATO/",
+        "Policies": [
+          {
+            "PolicyName": "ElwinBeanstalkApp",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "s3:PutObject",
+                    "s3:DeletObject"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::cxar-ato-team",
+                    "arn:aws:s3:::cxar-ato-team/*"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ElwinBeanstalkAppInstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/46111/CXAR/ATO/",
+        "Roles": [
+          {
+            "Ref": "ElwinBeanstalkApp"
+          }
+        ]
+      }
+    }
+  }
+}
