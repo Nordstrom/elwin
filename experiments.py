@@ -9,7 +9,8 @@ class Experiments:
 
     # Get the parameters of a planout experiment.
     def get_experiment_params(self, experimentName, **units):
-        # Attempt to get the script out of storage.  If it isn't found, bail.
+        # Attempt to get the script out of storage.  If it isn't found, the exception
+        # will bubble up and get returned as a 500.
         script = self.storage.experiments[experimentName]
 
         # Create an experiment object with the inputs specific to the user.
