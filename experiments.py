@@ -9,6 +9,9 @@ class Experiments:
 
     # Get the parameters of a planout experiment.
     def get_experiment_params(self, experimentName, **units):
+        # Attempt to get the script out of storage.  If it isn't found, bail.
+        script = self.storage.experiments[experimentName]
+
         # Create an experiment object with the inputs specific to the user.
         # TODO: investigate a pattern where a single experiment object is
         #       created which can generate the params using the units as input.
@@ -19,7 +22,7 @@ class Experiments:
         e.name = experimentName
 
         # Set the deserialized json definition of the experiment to be used.
-        e.script = self.storage.experiments.get(experimentName, None)
+        e.script = script
 
         # Exposure logging is currently disabled unti a logging system can be
         # implemented.
