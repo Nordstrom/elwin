@@ -49,6 +49,25 @@
         }]
       }
     },
+    "ElwinSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Allow HTTP in Port 80 out on all ports",
+        "SecurityGroupEgress": [{
+          "IpProtocol": "tcp",
+          "FromPort": 0,
+          "ToPort": 65535,
+          "CidrIp": "0.0.0.0/0"
+        }],
+        "SecurityGroupIngress": [{
+          "IpProtocol": "tcp",
+          "FromPort": 80,
+          "ToPort": 80,
+          "CidrIp": "10.0.0.0/0"
+        }],
+        "VpcId": "vpc-6207ff07"
+      }
+    },
     "Elwin": {
       "Type": "AWS::ElasticBeanstalk::Application",
       "Properties": {
@@ -91,7 +110,7 @@
         }, {
           "Namespace": "aws:autoscaling:launchconfiguration",
           "OptionName": "SecurityGroups",
-          "Value": "sg-94648cf3,sg-39668e5e"
+          "Value": { "Ref": "ElwinSecurityGroup" }
         }, {
           "Namespace": "aws:autoscaling:launchconfiguration",
           "OptionName": "EC2KeyName",
@@ -121,7 +140,7 @@
           "OptionName": "ELBSubnets",
           "Value": "subnet-bf95c8da,subnet-cae309bd"
         }],
-        "SolutionStackName": "64bit Amazon Linux 2015.09 v2.0.8 running Python 2.7"
+        "SolutionStackName": "64bit Amazon Linux 2015.09 v2.0.6 running Python 2.7"
       }
     },
     "ElwinEnvironment": {

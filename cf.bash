@@ -4,3 +4,9 @@ cf-create() {
 cf-delete() {
   aws cloudformation delete-stack --stack-name CXAR-ATO-46111-ElwinCF
 }
+cf-info() {
+  aws cloudformation describe-stacks --stack-name CXAR-ATO-46111-ElwinCF
+}
+cf-events() {
+  aws cloudformation describe-stack-events --stack-name CXAR-ATO-46111-ElwinCF
+}
