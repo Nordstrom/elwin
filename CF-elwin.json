@@ -4,51 +4,133 @@
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Sid": "",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "ec2.amazonaws.com"
-              },
-              "Action": "sts:AssumeRole"
-            }
-          ]
+          "Statement": [{
+            "Sid": "",
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+          }]
         },
         "Path": "/46111/CXAR/ATO/",
-        "Policies": [
-          {
-            "PolicyName": "ElwinBeanstalkApp",
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "s3:GetObject",
-                    "s3:ListBucket",
-                    "s3:PutObject",
-                    "s3:DeletObject"
-                  ],
-                  "Resource": [
-                    "arn:aws:s3:::cxar-ato-team",
-                    "arn:aws:s3:::cxar-ato-team/*"
-                  ]
-                }
+        "Policies": [{
+          "PolicyName": "ElwinBeanstalkApp",
+          "PolicyDocument": {
+            "Statement": [{
+              "Effect": "Allow",
+              "Action": [
+                "s3:ListBucket"
+              ],
+              "Resource": [
+                "arn:aws:s3:::cxar-ato-team"
               ]
-            }
+            }, {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+              ],
+              "Resource": [
+                "arn:aws:s3:::cxar-ato-team/elwin/*"
+              ]
+            }]
           }
-        ]
+        }]
       }
     },
     "ElwinBeanstalkAppInstanceProfile": {
       "Type": "AWS::IAM::InstanceProfile",
       "Properties": {
         "Path": "/46111/CXAR/ATO/",
-        "Roles": [
-          {
-            "Ref": "ElwinBeanstalkApp"
-          }
-        ]
+        "Roles": [{
+          "Ref": "ElwinBeanstalkApp"
+        }]
+      }
+    },
+    "Elwin": {
+      "Type": "AWS::ElasticBeanstalk::Application",
+      "Properties": {
+        "ApplicationName": "46111-CXAR-ATO-Elwin-ator",
+        "Description": "Elwin Planout Server implementation"
+      }
+    },
+    "ElwinVersion": {
+      "Type": "AWS::ElasticBeanstalk::ApplicationVersion",
+      "Properties": {
+        "ApplicationName": { "Ref": "Elwin" },
+        "Description": "Elwin version",
+        "SourceBundle": {
+          "S3Bucket": "cxar-ato-team",
+          "S3Key": "elwin/elwin.zip"
+        }
+      }
+    },
+    "ElwinConfigurationTemplate": {
+      "Type": "AWS::ElasticBeanstalk::ConfigurationTemplate",
+      "Properties": {
+        "ApplicationName": { "Ref": "Elwin" },
+        "Description": "AWS ElasticBeanstalk Sample Configuration Template",
+        "OptionSettings": [{
+          "Namespace": "aws:autoscaling:asg",
+          "OptionName": "MinSize",
+          "Value": "1"
+        }, {
+          "Namespace": "aws:autoscaling:asg",
+          "OptionName": "MaxSize",
+          "Value": "6"
+        }, {
+          "Namespace": "aws:elasticbeanstalk:environment",
+          "OptionName": "EnvironmentType",
+          "Value": "LoadBalanced"
+        }, {
+          "Namespace": "aws:autoscaling:launchconfiguration",
+          "OptionName": "InstanceType",
+          "Value": "t1.micro"
+        }, {
+          "Namespace": "aws:autoscaling:launchconfiguration",
+          "OptionName": "SecurityGroups",
+          "Value": "sg-94648cf3,sg-39668e5e"
+        }, {
+          "Namespace": "aws:autoscaling:launchconfiguration",
+          "OptionName": "EC2KeyName",
+          "Value": "CXAR_ATO"
+        }, {
+          "Namespace": "aws:autoscaling:launchconfiguration",
+          "OptionName": "MonitoringInterval",
+          "Value": "5 minute"
+        }, {
+          "Namespace": "aws:autoscaling:launchconfiguration",
+          "OptionName": "ImageId",
+          "Value": "ami-e3c2db82"
+        }, {
+          "Namespace": "aws:autoscaling:launchconfiguration",
+          "OptionName": "IamInstanceProfile",
+          "Value": { "Ref": "ElwinBeanstalkAppInstanceProfile" }
+        }, {
+          "Namespace": "aws:ec2:vpc",
+          "OptionName": "VPCId",
+          "Value": "vpc-6207ff07"
+        }, {
+          "Namespace": "aws:ec2:vpc",
+          "OptionName": "Subnets",
+          "Value": "subnet-bf95c8da,subnet-cae309bd"
+        }, {
+          "Namespace": "aws:ec2:vpc",
+          "OptionName": "ELBSubnets",
+          "Value": "subnet-bf95c8da,subnet-cae309bd"
+        }],
+        "SolutionStackName": "64bit Amazon Linux 2015.09 v2.0.8 running Python 2.7"
+      }
+    },
+    "ElwinEnvironment": {
+      "Type": "AWS::ElasticBeanstalk::Environment",
+      "Properties": {
+        "ApplicationName": { "Ref": "Elwin" },
+        "Description": "Elwin Environment",
+        "TemplateName": { "Ref": "ElwinConfigurationTemplate" },
+        "VersionLabel": { "Ref": "ElwinVersion" }
       }
     }
   }
