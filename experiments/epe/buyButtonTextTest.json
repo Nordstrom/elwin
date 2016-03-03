@@ -1,0 +1,32 @@
+{
+ "op": "seq",
+ "seq": [
+  {
+   "op": "set",
+   "var": "addToBagText",
+   "value": {
+    "choices": {
+     "op": "array",
+     "values": [
+      "addtobag",
+      "buy",
+      "control"
+     ]
+    },
+    "weights": {
+     "op": "array",
+     "values": [
+      0.45,
+      0.1,
+      0.45
+     ]
+    },
+    "unit": {
+     "op": "get",
+     "var": "userId"
+    },
+    "op": "weightedChoice"
+   }
+  }
+ ]
+}

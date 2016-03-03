@@ -1,0 +1,10 @@
+{
+    "segments": 1000,
+    "experimentOps": [
+        {
+            "experimentName": "buyButtonTextTest",
+            "op": "add",
+            "numSegments": 1000
+        }
+    ]
+}
