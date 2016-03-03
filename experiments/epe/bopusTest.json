@@ -1,0 +1,27 @@
+{
+    "op": "seq",
+    "seq": [
+        {
+            "op": "set",
+            "var": "bopusVersion",
+            "value": {
+                "choices": {
+                    "op": "array",
+                    "values": [
+                        "Control",
+                        "TestB",
+                        "TestC",
+                        "TestD",
+                        "TestE",
+                        "TestF"
+                    ]
+                },
+            "unit": {
+                "op": "get",
+                "var": "userId"
+            },
+            "op": "uniformChoice"
+            }
+        }
+    ]
+}

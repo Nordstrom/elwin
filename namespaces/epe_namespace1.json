@@ -1,0 +1,10 @@
+{
+    "segments": 1000,
+    "experimentOps": [
+        {
+            "experimentName": "bopusTest",
+            "op": "add",
+            "numSegments": 400
+        }
+    ]
+}
