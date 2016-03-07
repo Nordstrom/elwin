@@ -5,6 +5,11 @@
             "experimentName": "bopusTest",
             "op": "add",
             "numSegments": 400
+        },
+        {
+            "experimentName": "buyButtonTextTest",
+            "op": "add",
+            "numSegments": 600
         }
     ]
 }
