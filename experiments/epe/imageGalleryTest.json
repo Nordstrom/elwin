@@ -1,0 +1,25 @@
+{
+    "op": "seq",
+    "seq": [
+        {
+            "op": "set",
+            "var": "version",
+            "value": {
+                "choices": {
+                    "op": "array",
+                    "values": [
+                        "control",
+                        "thumbnails",
+                        "colorFilter",
+                        "availabilityInfo"
+                    ]
+                },
+            "unit": {
+                "op": "get",
+                "var": "userId"
+            },
+            "op": "uniformChoice"
+            }
+        }
+    ]
+}
