@@ -1,0 +1,25 @@
+{
+    "op": "seq",
+    "seq": [
+         {
+            "op": "set",
+            "var": "colorSwatchTest",
+            "value": {
+                "choices": {
+                    "op": "array",
+                    "values": [
+                        "control",
+                        "circle",
+                        "dropDown",
+                        "circleDropDown"
+                    ]
+                },
+                "unit": {
+                    "op": "get",
+                    "var": "userId"
+                },
+                "op": "uniformChoice"
+            }
+        }
+    ]
+}

@@ -5,6 +5,11 @@
             "experimentName": "imageGalleryTest",
             "op": "add",
             "numSegments": 600
+        },
+        {
+            "experimentName": "colorSwatchTest",
+            "op": "add",
+            "numSegments": 400
         }
     ]
 }
