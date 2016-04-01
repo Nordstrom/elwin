@@ -1,0 +1,23 @@
+{
+    "op": "seq",
+    "seq": [
+         {
+            "op": "set",
+            "var": "mobileLazyLoad",
+            "value": {
+                "choices": {
+                    "op": "array",
+                    "values": [
+                        "control",
+                        "drawers"
+                    ]
+                },
+                "unit": {
+                    "op": "get",
+                    "var": "userId"
+                },
+                "op": "uniformChoice"
+            }
+        }
+    ]
+}
