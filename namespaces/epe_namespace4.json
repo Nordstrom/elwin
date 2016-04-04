@@ -4,7 +4,7 @@
         {
             "experimentName": "salePriceLabelColorTest",
             "op": "add",
-            "numSegments": 1000
+            "numSegments": 700
         }
     ]
 }
