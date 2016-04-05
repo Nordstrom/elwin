@@ -1,0 +1,23 @@
+{
+    "op": "seq",
+    "seq": [
+         {
+            "op": "set",
+            "var": "salePriceLabelColor",
+            "value": {
+                "choices": {
+                    "op": "array",
+                    "values": [
+                        "control",
+                        "red"
+                    ]
+                },
+                "unit": {
+                    "op": "get",
+                    "var": "userId"
+                },
+                "op": "uniformChoice"
+            }
+        }
+    ]
+}
