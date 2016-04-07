@@ -29,6 +29,10 @@ def get_experiments_for_team(teamName, userId):
     except:
         return jsonify({"error": "Team Name Not Found"}), 500
 
+@application.route("/healthz")
+def get_health():
+    return "OK", 200
+
 # run the app.
 if __name__ == "__main__":
-    application.run()
+    application.run(threaded=True, host="0.0.0.0")
