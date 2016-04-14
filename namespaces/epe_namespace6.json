@@ -1,0 +1,10 @@
+{
+    "segments": 1000,
+    "experimentOps": [
+        {
+            "experimentName": "colorSwatchTest",
+            "op": "add",
+            "numSegments": 1000
+        }
+    ]
+}
