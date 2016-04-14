@@ -9,9 +9,7 @@
                     "op": "array",
                     "values": [
                         "control",
-                        "circle",
-                        "dropDown",
-                        "circleDropDown"
+                        "circle"
                     ]
                 },
                 "unit": {
