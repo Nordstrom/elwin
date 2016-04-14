@@ -49,6 +49,17 @@ class Storage:
                         namespaceEntry[segment] = experimentOp["experimentName"]
                         availableSegments.remove(segment)
 
+                # Reset all entries for the experiment to be removed and add the
+                # segment back into the pool of available segments.  Finally,
+                # sort the list of segments to return to the original state.
+                elif (experimentOp["op"] == "remove"):
+                    for segment in namespaceEntry:
+                        if (namespaceEntry[segment] == experimentOp["experimentName"]):
+                            namespaceEntry[segment] = ""
+                            availableSegments.append(segment)
+
+                    availableSegments.sort()
+
     # Iterate through the filesystem to load all of the defined experiments.
     # TODO: Move this to S3 or DDB
     def _load_experiments(self):
