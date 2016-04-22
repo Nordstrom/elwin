@@ -1,3 +1,75 @@
+import json
+from bson import BSON, json_util
+from pymongo import MongoClient
+from abc import ABCMeta, abstractmethod
+from planout.experiment import SimpleInterpretedExperiment
+from planout.assignment import *
+
+
+class queryCentralStorage(object):
+    __metaclass__ = ABCMeta
+    
+    def __init__(self, path, **units):
+        #create connection to db
+        pass
+    
+    @abstractmethod
+    def get_exp_params_by_exp_name(self, exp_name, **units):
+        pass
+    
+#     @abstractmethod
+#     def get_param_from_exp(self, exp_id, param, **units):
+#         pass
+    
+    @abstractmethod
+    def get_exps_params_by_group_id(self, dataset, group_id, units):
+        pass
+    
+class queryMongoStorage(queryCentralStorage):
+    __metaclass__ = ABCMeta
+    
+    def __init__(self, path, **units):
+        self.client = MongoClient(path)
+        self.db = self.client.test_database
+        
+    def get_exp_params_by_exp_name(self, database, exp_name, **units):
+        
+        exp_definition = self.db[database].find_one({"exp_names": exp_name}, 
+                                         {exp_name + ".exp_definition": "$all"})[exp_name][0]['exp_definition']
+        
+        e = SimpleInterpretedExperiment(units)
+        e.name = exp_name
+        e.script = exp_definition
+        e.set_auto_exposure_logging(False)
+        
+        params = e.get_params()
+        return params
+        
+    def get_exps_params_by_group_id(self, dataset, group_id, units):
+        namespaces = self.db[dataset].find({"group_ids": group_id})
+        exps = [(ns['name'], ns['num_segments'], ns['experiments']) for ns in namespaces if len(ns['experiments']) > 0]
+        res = []
+        for name, num_seg, es in exps:
+            seg = self.get_segment(name, num_seg, units)
+            good = [e for e in es if seg in e['segments']]
+            for g in good: 
+                e = SimpleInterpretedExperiment(unit=units)
+                e.name = g['name']
+                e.script = g['definition']
+                e.set_auto_exposure_logging(False)
+                
+                params = e.get_params()
+                res.append((e.name, params))
+        return res
+
+    def get_segment(self, name, num_segments, unit):
+        # randomly assign primary unit to a segment
+        a = Assignment(name)
+        a.segment = RandomInteger(min=0, max=num_segments - 1,
+                                  unit = unit)
+        return a.segment
+
+'''
 import os
 import json
 from planout.ops.random import *
@@ -70,3 +142,4 @@ class Storage:
                 name = exp.split(".")[0]
                 script = json.loads(open(teamFolder + "/" + exp).read())
                 self.experiments[name] = script
+'''
