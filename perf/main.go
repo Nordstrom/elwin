@@ -26,8 +26,6 @@ var config = struct {
 }{
 	rate:     100,
 	duration: time.Minute,
-	target:   "http://internal-46111-CXAR-ATO-Elwin-LB-2059848312.us-west-2.elb.amazonaws.com/epe/123",
-	bucket:   "cxar-ato-team",
 	key:      "elwin/perf.json",
 }
 
@@ -45,8 +43,15 @@ func main() {
 	if os.Getenv("TARGET") != "" {
 		config.target = os.Getenv("TARGET")
 	}
+	if config.target == "" {
+		log.Fatal("target must be set")
+	}
 	if os.Getenv("BUCKET") != "" {
 		config.bucket = os.Getenv("BUCKET")
+	}
+	// TODO: only works for aws buckets...
+	if config.bucket == "" {
+		log.Fatal("bucket must be set")
 	}
 	if os.Getenv("KEY") != "" {
 		config.key = os.Getenv("KEY")
