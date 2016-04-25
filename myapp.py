@@ -14,17 +14,17 @@ def get_experiment_response(teamName, experimentName, userId):
     try:
         # Build the response object and return it as json
         outDict = {}
-        outDict[experimentName] = experiments.get_experiment_params(experimentName, userId = userId)
+        outDict['experiments'] = experiments.get_experiment_params(experimentName, userId=userId, unit=userId)
         return jsonify(outDict), 200
     except:
         return jsonify({"error": "Experiment Not Found"}), 500
 
-@application.route("/<teamName>/<userId>")
-def get_experiments_for_team(teamName, userId):
+@application.route("/<teamName>/<unit>")
+def get_experiments_for_team(teamName, unit):
 
     try:
         outDict = {}
-        outDict["experiments"] = experiments.get_experiment_params_for_team(teamName, userId)
+        outDict["experiments"] = experiments.get_experiment_params_for_team(teamName, userId=unit, unit=unit)
         return jsonify(outDict), 200
     except:
         return jsonify({"error": "Team Name Not Found"}), 500
