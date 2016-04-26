@@ -1,4 +1,5 @@
 perf
+test
 *.bash
 *.log
 *.pyc
