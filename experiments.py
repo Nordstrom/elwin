@@ -5,7 +5,7 @@ from storage import queryMongoStorage
 # Thin layer in front of planout.
 class Experiments:
     def __init__(self):
-        self.storage = queryMongoStorage('mongodb://192.168.99.100:27017', 'test')
+        self.storage = queryMongoStorage('mongodb://elwin-storage:27017', 'test')
 
     # Get the parameters of a planout experiment.
     def get_experiment_params(self, experimentName, **units):
