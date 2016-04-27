@@ -18,6 +18,24 @@ class queryCentralStorage(object):
     def get_exps_params_by_group_id(self, group_id):
         pass
 
+'''
+queryMongoStorage uses pymongo client to retreive the params
+
+data format:
+    Namespace {
+        name               string
+        group_ids          []string
+        num_segments       int
+        available_segments []int
+        experiments        []Experiment
+    }
+    Experiment {
+        name       string
+        definition string
+        segments   []int
+    }
+'''
+
 class queryMongoStorage(queryCentralStorage):
     __metaclass__ = ABCMeta
 
