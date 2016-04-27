@@ -1,72 +1,53 @@
-import os
 import json
-from planout.ops.random import *
-from planout.assignment import *
+from bson import BSON, json_util
+from pymongo import MongoClient
+from abc import ABCMeta, abstractmethod
 
-# Manages interactions with the storage layer.
-class Storage:
-    def __init__(self):
-        self.namespaces = {}
-        self.experiments = {}
-        self._load_namespaces()
-        self._load_experiments()
+class queryCentralStorage(object):
+    __metaclass__ = ABCMeta
 
-    # Iterate through the defined namespaces and load the corresponding data
-    # into a hash table.
-    def _load_namespaces(self):
-        namespaceRoot = "namespaces"
-        for namespace in os.listdir(namespaceRoot):
+    def __init__(self, path, dataset):
+        #create connection to db
+        pass
 
-            # Files have the format <teamName>_<namespaceName>.json
-            fileName = namespace.split(".")[0]
-            teamName = fileName.split("_")[0]
-            namespaceName = fileName.split("_")[1]
+    @abstractmethod
+    def get_exp_params_by_exp_name(self, exp_name):
+        pass
 
-            namespaceData = json.loads(open(namespaceRoot + "/" + namespace).read())
+    @abstractmethod
+    def get_exps_params_by_group_id(self, group_id):
+        pass
 
-            # Get or create an entry for the team for easier access
-            teamNamespaces = self.namespaces.get(teamName, None)
-            if (teamNamespaces == None):
-                teamNamespaces = self.namespaces[teamName] = {}
+'''
+queryMongoStorage uses pymongo client to retreive the params
 
-            # Save the total number of segments to be used when hashing
-            namespaceEntry = teamNamespaces[namespaceName] = {}
-            namespaceEntry["totalSegments"] = namespaceData["segments"]
+data format:
+    Namespace {
+        name               string
+        group_ids          []string
+        num_segments       int
+        available_segments []int
+        experiments        []Experiment
+    }
+    Experiment {
+        name       string
+        definition string
+        segments   []int
+    }
+'''
 
-            availableSegments = range(namespaceData["segments"])
-            for experimentOp in namespaceData["experimentOps"]:
+class queryMongoStorage(queryCentralStorage):
+    __metaclass__ = ABCMeta
 
-                # Sample the available segments and assign the experiment to them.
-                # This is done randomly but deterministically using a hash function
-                # which makes it repeatable.
-                if (experimentOp["op"] == "add"):
-                    assignment = Assignment(namespaceName)
-                    assignment.sampled_segments = Sample(choices=availableSegments,
-                               draws=experimentOp["numSegments"],
-                               unit=experimentOp["experimentName"])
+    def __init__(self, path, dataset):
+        self.client = MongoClient(path)
+        self.db = self.client.test_database
+        self.dataset = dataset
 
-                    for segment in assignment.sampled_segments:
-                        namespaceEntry[segment] = experimentOp["experimentName"]
-                        availableSegments.remove(segment)
+    def get_exp_params_by_exp_name(self, exp_name):
+        query = self.db[self.dataset].find_one({"experiments.name": exp_name})
+        return (query['name'], query['num_segments'], query['experiments'])
 
-                # Reset all entries for the experiment to be removed and add the
-                # segment back into the pool of available segments.  Finally,
-                # sort the list of segments to return to the original state.
-                elif (experimentOp["op"] == "remove"):
-                    for segment in namespaceEntry:
-                        if (namespaceEntry[segment] == experimentOp["experimentName"]):
-                            namespaceEntry[segment] = ""
-                            availableSegments.append(segment)
-
-                    availableSegments.sort()
-
-    # Iterate through the filesystem to load all of the defined experiments.
-    # TODO: Move this to S3 or DDB
-    def _load_experiments(self):
-        experimentRootFolder = "experiments"
-        for teamName in os.listdir(experimentRootFolder):
-            teamFolder = experimentRootFolder + "/" + teamName
-            for exp in os.listdir(teamFolder):
-                name = exp.split(".")[0]
-                script = json.loads(open(teamFolder + "/" + exp).read())
-                self.experiments[name] = script
+    def get_exps_params_by_group_id(self, group_id):
+        namespaces = self.db[self.dataset].find({"group_ids": group_id})
+        return [(ns['name'], ns['num_segments'], ns['experiments']) for ns in namespaces if len(ns['experiments']) > 0]

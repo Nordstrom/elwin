@@ -5,4 +5,5 @@ itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
 PlanOut==0.5
+pymongo==3.2.2
 Werkzeug==0.11.5
