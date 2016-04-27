@@ -1,6 +1,6 @@
 import centralStorageClass
 
-path = 'mongodb://elwin-storage:27017'
+path = os.getenv('DB_CONN', 'mongodb://elwin-storage:27017')
 
 csc = centralStorageClass.mongoStorage(path)
 

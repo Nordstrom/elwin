@@ -14,10 +14,6 @@ class queryCentralStorage(object):
     def get_exp_params_by_exp_name(self, exp_name):
         pass
 
-#     @abstractmethod
-#     def get_param_from_exp(self, exp_id, param, **units):
-#         pass
-
     @abstractmethod
     def get_exps_params_by_group_id(self, group_id):
         pass
