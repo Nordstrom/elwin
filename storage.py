@@ -3,6 +3,7 @@ from bson import BSON, json_util
 from pymongo import MongoClient
 from abc import ABCMeta, abstractmethod
 
+
 class queryCentralStorage(object):
     __metaclass__ = ABCMeta
 
@@ -17,6 +18,7 @@ class queryCentralStorage(object):
     @abstractmethod
     def get_exps_params_by_group_id(self, group_id):
         pass
+
 
 '''
 queryMongoStorage uses pymongo client to retreive the params
@@ -36,6 +38,7 @@ data format:
     }
 '''
 
+
 class queryMongoStorage(queryCentralStorage):
     __metaclass__ = ABCMeta
 
@@ -50,4 +53,5 @@ class queryMongoStorage(queryCentralStorage):
 
     def get_exps_params_by_group_id(self, group_id):
         namespaces = self.db[self.dataset].find({"group_ids": group_id})
-        return [(ns['name'], ns['num_segments'], ns['experiments']) for ns in namespaces if len(ns['experiments']) > 0]
+        return ((ns['name'], ns['num_segments'], ns['experiments'])
+                for ns in namespaces if ns['experiments'])

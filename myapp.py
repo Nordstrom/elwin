@@ -1,38 +1,71 @@
-from flask import *
+"""
+myapp runs planout as a service
+"""
+from flask import Flask, jsonify
 from experiments import Experiments
 
 experiments = Experiments()
 
 # Create the application, elastic beanstalk expects the name "application"
-application = Flask(__name__)
+app = Flask(__name__)
+
 
 # Return the parameters relevant to a specific experiment
-@application.route("/<teamName>/<experimentName>/<userId>")
-def get_experiment_response(teamName, experimentName, userId):
+@app.route("/<team_name>/<experiment_name>/<unit>")
+def get_experiment_response(team_name, experiment_name, unit):
+    """Return JSON of a specific experiment
+
+    Args:
+        team_name: name of the team (group_id)
+        experiment_name: name of the experiment
+        unit: unique identifier for user
+
+    Returns:
+        JSON string of experiment
+    """
 
     # Get the params for the instance of the experiment
     try:
         # Build the response object and return it as json
-        outDict = {}
-        outDict['experiments'] = experiments.get_experiment_params(experimentName, userId=userId, unit=userId)
-        return jsonify(outDict), 200
+        out_dict = {}
+        out_dict['experiments'] = experiments.get_experiment_params(
+            team_name, experiment_name, unit)
+        return jsonify(out_dict), 200
     except:
         return jsonify({"error": "Experiment Not Found"}), 500
 
-@application.route("/<teamName>/<unit>")
-def get_experiments_for_team(teamName, unit):
+
+@app.route("/<team_name>/<unit>")
+def get_experiments_for_team(team_name, unit):
+    """Return JSON for team's experiments
+    
+    get_expirments_for_team returns experiments json of all experiments
+    associated with a team
+    
+    Args:
+        team_name: name of the team (group_id)
+        unit: unique identifier for user
+
+    Returns:
+        JSON string of experiments
+    """
 
     try:
-        outDict = {}
-        outDict["experiments"] = experiments.get_experiment_params_for_team(teamName, userId=unit, unit=unit)
-        return jsonify(outDict), 200
+        out_dict = {}
+        out_dict["experiments"] = experiments.get_experiment_params_for_team(
+            team_name, unit)
+        return jsonify(out_dict), 200
     except:
         return jsonify({"error": "Team Name Not Found"}), 500
 
-@application.route("/healthz")
+
+@app.route("/healthz")
 def get_health():
+    """
+    get_health returns a health status for load balancer
+    """
     return "OK", 200
 
 # run the app.
 if __name__ == "__main__":
-    application.run(threaded=True, host="0.0.0.0")
+    app.run(threaded=True, host="0.0.0.0")

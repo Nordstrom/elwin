@@ -1,13 +1,12 @@
 import centralStorageClass
+import os
 
 path = os.getenv('DB_CONN', 'mongodb://elwin-storage:27017')
 
 csc = centralStorageClass.mongoStorage(path)
 
+csc.db['test'].remove({})
 
-csc.remove_namespace('test', 'epe-1')
-csc.remove_namespace('test', 'epe-2')
-csc.remove_namespace('test', 'loy-1')
 csc.add_namespace('test', 'epe-1', 'epe', 10)
 csc.add_namespace('test', 'epe-2', 'epe', 10)
 csc.add_namespace('test', 'loy-1', 'loy', 10)
