@@ -1,6 +1,9 @@
+'''
+experiments defines functions for determining experiments to show
+'''
 import os
 from planout.experiment import SimpleInterpretedExperiment
-from planout.assignment import *
+from planout.assignment import Assignment, RandomInteger
 from storage import queryMongoStorage
 
 
@@ -11,42 +14,44 @@ class Experiments:
         self.storage = queryMongoStorage(host, 'test')
 
     # Get the parameters of a planout experiment.
-    def get_experiment_params(self, experimentName, **units):
+    def get_experiment_params(self, team_name, experiment_name, unit):
         # Attempt to get the script out of storage.  If it isn't found, the exception
         # will bubble up and get returned as a 500.
-        (name, num_seg, experiments) = self.storage.get_exp_params_by_exp_name(experimentName)
-        seg = self.get_segment(name, num_seg, **units)
-        good = [exp for exp in experiments if seg in exp['segments'] and exp['name'] == experimentName]
+        (name, num_seg, experiments) = self.storage.get_exp_params_by_exp_name(
+            team_name, experiment_name)
+        seg = self.get_segment(name, num_seg, unit=unit)
+        good = (exp
+                for exp in experiments
+                if seg in exp['segments'] and exp['name'] == experiment_name)
         res = {}
         for g in good:
-            e = SimpleInterpretedExperiment(**units)
-            e.name = g['name']
-            e.script = g['definition']
-            e.set_auto_exposure_logging(False)
+            exp = SimpleInterpretedExperiment(userId=unit, unit=unit)
+            exp.name = g['name']
+            exp.script = g['definition']
+            exp.set_auto_exposure_logging(False)
 
-            params = e.get_params()
-            res[e.name] = params
+            params = exp.get_params()
+            res[exp.name] = params
         return res
 
-    def get_experiment_params_for_team(self, teamName, **units):
+    def get_experiment_params_for_team(self, teamName, unit):
         namespaces = self.storage.get_exps_params_by_group_id(teamName)
         res = {}
         for name, num_seg, experiments in namespaces:
-            seg = self.get_segment(name, num_seg, **units)
-            good = [exp for exp in experiments if seg in exp['segments']]
+            seg = self.get_segment(name, num_seg, unit=unit)
+            good = (exp for exp in experiments if seg in exp['segments'])
             for g in good:
-                e = SimpleInterpretedExperiment(**units)
-                e.name = g['name']
-                e.script = g['definition']
-                e.set_auto_exposure_logging(False)
+                exp = SimpleInterpretedExperiment(userId=unit, unit=unit)
+                exp.name = g['name']
+                exp.script = g['definition']
+                exp.set_auto_exposure_logging(False)
 
-                params = e.get_params()
-                res[e.name] = params
+                params = exp.get_params()
+                res[exp.name] = params
         return res
 
     def get_segment(self, name, num_segments, **units):
         # randomly assign primary unit to a segment
-        a = Assignment(name)
-        a.segment = RandomInteger(min=0, max=num_segments - 1,
-                                  **units)
-        return a.segment
+        ass = Assignment(name)
+        ass.segment = RandomInteger(min=0, max=num_segments - 1, **units)
+        return ass.segment
