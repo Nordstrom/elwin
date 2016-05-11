@@ -47,8 +47,8 @@ class queryMongoStorage(queryCentralStorage):
         self.db = self.client.test_database
         self.dataset = dataset
 
-    def get_exp_params_by_exp_name(self, exp_name):
-        query = self.db[self.dataset].find_one({"experiments.name": exp_name})
+    def get_exp_params_by_exp_name(self, team_name, exp_name):
+        query = self.db[self.dataset].find_one({"group_ids": team_name, "experiments.name": exp_name})
         return (query['name'], query['num_segments'], query['experiments'])
 
     def get_exps_params_by_group_id(self, group_id):
