@@ -4,3 +4,6 @@ test
 *.log
 *.pyc
 *.zip
+.git
+storage/storage
+storage/run.sh

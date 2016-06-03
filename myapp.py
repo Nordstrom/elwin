@@ -9,7 +9,6 @@ experiments = Experiments()
 # Create the application, elastic beanstalk expects the name "application"
 app = Flask(__name__)
 
-
 # Return the parameters relevant to a specific experiment
 @app.route("/<team_name>/<experiment_name>/<unit>")
 def get_experiment_response(team_name, experiment_name, unit):
@@ -36,7 +35,7 @@ def get_experiment_response(team_name, experiment_name, unit):
 
 
 @app.route("/")
-def get_experiments_for_team(team_name, unit):
+def get_experiments_for_team():
     """Return JSON for team's experiments
 
     get_expirments_for_team returns experiments json of all experiments
@@ -51,16 +50,16 @@ def get_experiments_for_team(team_name, unit):
     """
 
     group_id = request.args.get('group-id')
-    unit_type = request.args.get('unit-type')
-    unit = request.args.get('unit')
+    unit_type = request.args.getlist('unit-type')
+    unit = request.args.getlist('unit')
 
-    if not (group_id and unit):
+    if not group_id or not unit_type:
         return "ur a turd", 400
 
     try:
         out_dict = {}
         out_dict["experiments"] = experiments.get_experiment_params_for_team(
-            group_id, unit-type, unit)
+            group_id, unit_type, unit)
         return jsonify(out_dict), 200
     except:
         return jsonify({"error": "Team Name Not Found"}), 500
