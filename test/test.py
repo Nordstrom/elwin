@@ -26,7 +26,7 @@ csc.add_experiment('test', 'epe-1', 'imageTest', 10, {
                 },
             "unit": {
                 "op": "get",
-                "var": "userId"
+                "var": "unit"
             },
             "op": "uniformChoice"
             }
@@ -50,7 +50,7 @@ csc.add_experiment('test', 'epe-2', 'colorTest', 8, {
                 },
                 "unit": {
                     "op": "get",
-                    "var": "userId"
+                    "var": "unit"
                 },
                 "op": "uniformChoice"
             }
@@ -75,7 +75,7 @@ csc.add_experiment('test', 'loy-1', 'checkoutTest', 10, {
     },
     "unit": {
      "op": "get",
-     "var": "userId"
+     "var": "unit"
     },
     "op": "uniformChoice"
    }

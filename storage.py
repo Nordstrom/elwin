@@ -27,6 +27,7 @@ data format:
     Namespace {
         name               string
         group_ids          []string
+        units              []string
         num_segments       int
         available_segments []int
         experiments        []Experiment
@@ -51,7 +52,7 @@ class queryMongoStorage(queryCentralStorage):
         query = self.db[self.dataset].find_one({"group_ids": team_name, "experiments.name": exp_name})
         return (query['name'], query['num_segments'], query['experiments'])
 
-    def get_exps_params_by_group_id(self, group_id):
-        namespaces = self.db[self.dataset].find({"group_ids": group_id})
+    def get_exps_params_by_group_id(self, group_id, unit_type):
+        namespaces = self.db[self.dataset].find({"group_ids": group_id, "units": unit_type})
         return ((ns['name'], ns['num_segments'], ns['experiments'])
                 for ns in namespaces if ns['experiments'])

@@ -34,14 +34,15 @@ class Experiments:
             res[exp.name] = params
         return res
 
-    def get_experiment_params_for_team(self, teamName, unit):
-        namespaces = self.storage.get_exps_params_by_group_id(teamName)
+    def get_experiment_params_for_team(self, team_name, unit_type, unit):
+        """Get experiment params for a given team and unit type."""
+        namespaces = self.storage.get_exps_params_by_group_id(team_name, unit_type)
         res = {}
         for name, num_seg, experiments in namespaces:
             seg = self.get_segment(name, num_seg, unit=unit)
             good = (exp for exp in experiments if seg in exp['segments'])
             for g in good:
-                exp = SimpleInterpretedExperiment(userId=unit, unit=unit)
+                exp = SimpleInterpretedExperiment(unit=unit)
                 exp.name = g['name']
                 exp.script = g['definition']
                 exp.set_auto_exposure_logging(False)

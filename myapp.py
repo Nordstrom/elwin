@@ -1,7 +1,7 @@
 """
 myapp runs planout as a service
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from experiments import Experiments
 
 experiments = Experiments()
@@ -35,13 +35,13 @@ def get_experiment_response(team_name, experiment_name, unit):
         return jsonify({"error": "Experiment Not Found"}), 500
 
 
-@app.route("/<team_name>/<unit>")
+@app.route("/")
 def get_experiments_for_team(team_name, unit):
     """Return JSON for team's experiments
-    
+
     get_expirments_for_team returns experiments json of all experiments
     associated with a team
-    
+
     Args:
         team_name: name of the team (group_id)
         unit: unique identifier for user
@@ -50,10 +50,17 @@ def get_experiments_for_team(team_name, unit):
         JSON string of experiments
     """
 
+    group_id = request.args.get('group-id')
+    unit_type = request.args.get('unit-type')
+    unit = request.args.get('unit')
+
+    if not (group_id and unit):
+        return "ur a turd", 400
+
     try:
         out_dict = {}
         out_dict["experiments"] = experiments.get_experiment_params_for_team(
-            team_name, unit)
+            group_id, unit-type, unit)
         return jsonify(out_dict), 200
     except:
         return jsonify({"error": "Team Name Not Found"}), 500
