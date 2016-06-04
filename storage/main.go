@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -133,7 +134,13 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rootTmpl.Execute(w, data)
+	j, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		log.Printf("Error marshalling json: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rootTmpl.Execute(w, string(j))
 }
 
 var rootTmpl = template.Must(template.ParseFiles("rootTemplate.html"))
