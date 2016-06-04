@@ -31,9 +31,9 @@ type namespace struct {
 }
 
 type experiment struct {
-	Name       string                 `bson:"name,omitempty" json:"name"`
-	Definition map[string]interface{} `bson:"definition,omitempty" json:"definition"`
-	Segments   []int                  `bson:"segments,omitempty" json:"segments"`
+	Name       string                 `bson:"name" json:"name"`
+	Definition map[string]interface{} `bson:"definition" json:"definition"`
+	Segments   []int                  `bson:"segments" json:"segments"`
 }
 
 const (
