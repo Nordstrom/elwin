@@ -1,11 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -96,12 +99,19 @@ func main() {
 		errChan <- http.ListenAndServe(cfg.addr, nil)
 	}()
 
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
+
 	select {
 	case err := <-errChan:
 		if err != nil {
 			log.Fatal(err)
 		}
 		// smooth shutdown
+	case sig := <-signalChan:
+		log.Println(fmt.Sprintf("Captured %v. Exitting...", sig))
+		// smooth shutdown
+		os.Exit(0)
 	}
 }
 
