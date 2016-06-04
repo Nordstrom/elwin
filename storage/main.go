@@ -22,12 +22,12 @@ var cfg = struct {
 }{}
 
 type namespace struct {
-	Name              string       `bson:"name,omitempty" json:"name"`
-	GroupIDs          []string     `bson:"group_ids,omitempty" json:"groupIDs"`
-	Units             []string     `bson:"units,omitempty" json:"units"`
-	NumSegments       int          `bson:"num_segments,omitempty" json:"numSegments"`
-	AvailableSegments []int        `bson:"available_segments,omitempty" json:"availableSegments"`
-	Experiments       []experiment `bson:"experiments,omitempty" json:"experiments"`
+	Name              string       `bson:"name" json:"name"`
+	GroupIDs          []string     `bson:"group_ids" json:"groupIDs"`
+	Units             []string     `bson:"units" json:"units"`
+	NumSegments       int          `bson:"num_segments" json:"numSegments"`
+	AvailableSegments []int        `bson:"available_segments" json:"availableSegments"`
+	Experiments       []experiment `bson:"experiments" json:"experiments"`
 }
 
 type experiment struct {

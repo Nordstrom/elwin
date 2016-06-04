@@ -88,6 +88,7 @@ func setNamespace(w http.ResponseWriter, r *http.Request) {
 		Units:             r.Form[paramUnit],
 		NumSegments:       segments,
 		AvailableSegments: avail,
+		Experiments:       []experiment{},
 	})
 	if err != nil {
 		http.Error(w, "error inserting to db: "+err.Error(), http.StatusInternalServerError)
@@ -105,7 +106,7 @@ func deleteNamespace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	c := cfg.session.DB(cfg.db).C(cfg.coll)
-	if err := c.Remove(namespace{Name: r.Form.Get(paramNsName)}); err != nil {
+	if err := c.Remove(bson.M{"name": r.Form.Get(paramNsName)}); err != nil {
 		http.Error(w, "error deleting document: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
