@@ -50,11 +50,12 @@ class mongoStorage(centralStorage):
         self.client = MongoClient(path)
         self.db = self.client.test_database
         
-    def add_namespace(self, database, namespace_name, group_id, num_segments):
+    def add_namespace(self, database, namespace_name, group_id, units, num_segments):
         result = self.db[database].insert_one(
             {
                 "name": namespace_name,
                 "group_ids": [group_id],
+                "units": units,
                 "num_segments": num_segments,
                 "available_segments": range(num_segments),
                 "experiments": []
