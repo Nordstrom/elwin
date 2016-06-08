@@ -7,9 +7,9 @@ csc = centralStorageClass.mongoStorage(path)
 
 csc.db['test'].remove({})
 
-csc.add_namespace('test', 'epe-1', 'epe', 10)
-csc.add_namespace('test', 'epe-2', 'epe', 10)
-csc.add_namespace('test', 'loy-1', 'loy', 10)
+csc.add_namespace('test', 'epe-1', 'epe', ['userid'], 10)
+csc.add_namespace('test', 'epe-2', 'epe', ['userid', 'test'], 10)
+csc.add_namespace('test', 'loy-1', 'loy', ['userid'], 10)
 
 csc.add_experiment('test', 'epe-1', 'imageTest', 10, {
     "op": "seq",
@@ -24,11 +24,11 @@ csc.add_experiment('test', 'epe-1', 'imageTest', 10, {
                         "availabilityInfo"
                     ]
                 },
-            "unit": {
-                "op": "get",
-                "var": "unit"
-            },
-            "op": "uniformChoice"
+                "unit": {
+                    "op": "get",
+                    "var": "unit"
+                },
+                "op": "uniformChoice"
             }
         }
     ]
@@ -37,7 +37,7 @@ csc.add_experiment('test', 'epe-1', 'imageTest', 10, {
 csc.add_experiment('test', 'epe-2', 'colorTest', 8, {
     "op": "seq",
     "seq": [
-         {
+        {
             "op": "set",
             "var": "colorSwatchTest",
             "value": {
@@ -59,28 +59,28 @@ csc.add_experiment('test', 'epe-2', 'colorTest', 8, {
 })
 
 csc.add_experiment('test', 'loy-1', 'checkoutTest', 10, {
- "op": "seq",
- "seq": [
-  {
-   "op": "set",
-   "var": "nontenderCheckoutCopy",
-   "value": {
-    "choices": {
-     "op": "array",
-     "values": [
-      "Control",
-      "var1",
-      "var2"
-     ]
-    },
-    "unit": {
-     "op": "get",
-     "var": "unit"
-    },
-    "op": "uniformChoice"
-   }
-  }
- ]
+    "op": "seq",
+    "seq": [
+        {
+            "op": "set",
+            "var": "nontenderCheckoutCopy",
+            "value": {
+                "choices": {
+                    "op": "array",
+                    "values": [
+                        "Control",
+                        "var1",
+                        "var2"
+                    ]
+                },
+                "unit": {
+                    "op": "get",
+                    "var": "unit"
+                },
+                "op": "uniformChoice"
+            }
+        }
+    ]
 })
 
 cur = csc.client.test_database.test.find()
