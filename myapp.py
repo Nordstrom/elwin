@@ -53,8 +53,8 @@ def get_experiments_for_team():
     unit_type = request.args.getlist('unit-type')
     unit = request.args.getlist('unit')
 
-    if not group_id or not unit_type:
-        return "ur a turd", 400
+    if not group_id or not unit_type or not unit:
+        return "must supply group-id, unit-type, and unit", 400
 
     try:
         out_dict = {}
