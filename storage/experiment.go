@@ -54,6 +54,7 @@ func getExperiment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	enc := json.NewEncoder(w)
 	if err := enc.Encode(doc); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

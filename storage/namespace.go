@@ -43,6 +43,7 @@ func getNamespace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	enc := json.NewEncoder(w)
 	if err := enc.Encode(data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
