@@ -56,6 +56,9 @@ def get_experiments_for_team():
     if not group_id or not unit_type or not unit:
         return "must supply group-id, unit-type, and unit", 400
 
+    if not len(unit_type) == len(unit):
+        return "must have equal number of unit-type and unit", 400
+
     try:
         out_dict = {}
         out_dict["experiments"] = experiments.get_experiment_params_for_team(
