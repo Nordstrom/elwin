@@ -63,6 +63,8 @@ class Experiments:
 
                 params = exp.get_params()
                 res[exp.name] = params
+        if not res:
+            raise ValueError("Not found, group-id: %s, unit-type: %s" % (team_name, unit_type))
         return res
 
     def get_segment(self, name, num_segments, **units):

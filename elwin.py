@@ -74,13 +74,14 @@ def get_experiments_for_team():
         return "must have equal number of unit-type and unit", 400
 
     try:
-        out_dict = {}
-        out_dict["experiments"] = experiments.get_experiment_params_for_team(
+        exps = experiments.get_experiment_params_for_team(
             group_id, unit_type, unit)
+    except ValueError as e:
+        return str(e), 400
+    else:
+        out_dict = {}
+        out_dict["experiments"] = exps
         return jsonify(out_dict), 200
-    except:
-        return jsonify({"error": "Team Name Not Found"}), 500
-
 
 @app.route("/healthz")
 def get_health():
