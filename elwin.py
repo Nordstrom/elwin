@@ -77,7 +77,7 @@ def get_experiments_for_team():
         exps = experiments.get_experiment_params_for_team(
             group_id, unit_type, unit)
     except ValueError as e:
-        return str(e), 400
+        return str(e), 404
     else:
         out_dict = {}
         out_dict["experiments"] = exps
