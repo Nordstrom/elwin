@@ -26,21 +26,33 @@ def get_segment(name, num_segments, **units):
     ass.segment = RandomInteger(min=0, max=num_segments - 1, **units)
     return ass.segment
 
+def get_unit_dict(units, args):
+    d = {}
+    for u in units:
+        d[u] = args.get(u)
+    return d
+
+def get_unit_arr(units, args):
+    return [args.get(u) for u in units]
+
 # Thin layer in front of planout.
 class Experiments:
     def __init__(self):
         host = os.getenv('DB_CONN', 'mongodb://elwin-storage:27017')
         self.storage = queryMongoStorage(host, 'test')
 
-    def get_experiment_params_for_team(self, team_name, unit_type, unit):
+    def get_experiment_params_for_team(self, team_name, args):
         """Get experiment params for a given team and unit type."""
-        namespaces = self.storage.get_exps_params_by_group_id(team_name, unit_type)
+        units = [u for u in args.keys() if u != "group-id"]
+        namespaces = self.storage.get_exps_params_by_group_id(team_name, units)
         res = {}
-        for name, num_seg, experiments in namespaces:
-            seg = get_segment(name, num_seg, unit=unit)
-            good = (exp for exp in experiments if seg in exp['segments'])
+        for ns in namespaces:
+            u_arr = get_unit_arr(ns['units'], args)
+            u_dict = get_unit_dict(ns['units'], args)
+            seg = get_segment(ns['name'], ns['num_segments'], unit=u_arr)
+            good = (exp for exp in ns['experiments'] if seg in exp['segments'])
             for g in good:
-                exp = SimpleInterpretedExperiment(unit=unit)
+                exp = SimpleInterpretedExperiment(**u_dict)
                 exp.name = g['name']
                 exp.script = g['definition']
                 exp.set_auto_exposure_logging(False)
@@ -48,6 +60,5 @@ class Experiments:
                 params = exp.get_params()
                 res[exp.name] = params
         if not res:
-            raise ValueError("Not found, group-id: %s, unit-type: %s" % (team_name, unit_type))
+            raise ValueError("Not found, group-id: %s, unit-type: %s" % (team_name, args))
         return res
-

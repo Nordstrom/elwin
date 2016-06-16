@@ -64,6 +64,14 @@ class queryMongoStorage(queryCentralStorage):
         self.dataset = dataset
 
     def get_exps_params_by_group_id(self, group_id, unit_type):
-        namespaces = self.db[self.dataset].find({"group_ids": group_id, "units": unit_type})
-        return ((ns['name'], ns['num_segments'], ns['experiments'])
-                for ns in namespaces if ns['experiments'])
+        namespaces = self.db[self.dataset].find({
+            "group_ids": group_id,
+            "units": {
+                "$not": {
+                    "$elemMatch": {
+                        "$nin": unit_type
+                        }
+                    }
+                }
+            })
+        return (ns for ns in namespaces if ns['experiments'])

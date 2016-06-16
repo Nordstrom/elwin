@@ -61,12 +61,13 @@ csc.add_experiment('test', 'epe-1', 'imageTest', 10, {
                 "choices": {
                     "op": "array",
                     "values": [
-                        "availabilityInfo"
+                        "availabilityInfo",
+                        "unavailabilityInfo"
                     ]
                 },
                 "unit": {
                     "op": "get",
-                    "var": "unit"
+                    "var": "userid"
                 },
                 "op": "uniformChoice"
             }
@@ -89,8 +90,17 @@ csc.add_experiment('test', 'epe-2', 'colorTest', 8, {
                     ]
                 },
                 "unit": {
-                    "op": "get",
-                    "var": "unit"
+                    "op": "array",
+                    "values": [
+                        {
+                            "op": "get",
+                            "var": "userid"
+                        },
+                        {
+                            "op": "get",
+                            "var": "test"
+                        }
+                    ]
                 },
                 "op": "uniformChoice"
             }
@@ -115,7 +125,7 @@ csc.add_experiment('test', 'loy-1', 'checkoutTest', 10, {
                 },
                 "unit": {
                     "op": "get",
-                    "var": "unit"
+                    "var": "userid"
                 },
                 "op": "uniformChoice"
             }

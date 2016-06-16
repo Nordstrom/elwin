@@ -39,20 +39,20 @@ def get_experiments_for_team():
     """
 
     group_id = request.args.get('group-id')
-    unit_type = request.args.getlist('unit-type')
-    unit = request.args.getlist('unit')
 
-    if not group_id or not unit_type or not unit:
-        return "must supply group-id, unit-type, and unit", 400
-
-    if not len(unit_type) == len(unit):
-        return "must have equal number of unit-type and unit", 400
+    if not group_id:
+        return "must supply group-id", 400
+    
+    if len(request.args) == 1:
+        return "must supply other params", 400
 
     try:
         exps = experiments.get_experiment_params_for_team(
-            group_id, unit_type, unit)
+            group_id, request.args)
     except ValueError as e:
         return str(e), 404
+    except Exception, e:
+        return jsonify({"error": str(e)}), 500
     else:
         out_dict = {}
         out_dict["experiments"] = exps
