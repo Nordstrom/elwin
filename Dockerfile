@@ -20,4 +20,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /usr/src/app
 EXPOSE 5000
-CMD ["/usr/local/bin/gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "--threads", "8", "myapp:app"]
+CMD ["/usr/local/bin/gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "--threads", "8", "elwin:app"]
