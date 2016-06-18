@@ -30,7 +30,7 @@ class queryCentralStorage(object):
         pass
 
     @abstractmethod
-    def get_exps_params_by_group_id(self, group_id):
+    def get_exps_params_by_group_id(self, group_id, unit_type):
         pass
 
 
@@ -63,7 +63,18 @@ class queryMongoStorage(queryCentralStorage):
         self.db = self.client.test_database
         self.dataset = dataset
 
+    def get_exp_params_by_exp_name(self, exp_name):
+        pass
+
     def get_exps_params_by_group_id(self, group_id, unit_type):
-        namespaces = self.db[self.dataset].find({"group_ids": group_id, "units": unit_type})
-        return ((ns['name'], ns['num_segments'], ns['experiments'])
-                for ns in namespaces if ns['experiments'])
+        namespaces = self.db[self.dataset].find({
+            "group_ids": group_id,
+            "units": {
+                "$not": {
+                    "$elemMatch": {
+                        "$nin": unit_type
+                        }
+                    }
+                }
+            })
+        return (ns for ns in namespaces if ns['experiments'])
