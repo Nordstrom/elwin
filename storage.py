@@ -30,7 +30,7 @@ class queryCentralStorage(object):
         pass
 
     @abstractmethod
-    def get_exps_params_by_group_id(self, group_id):
+    def get_exps_params_by_group_id(self, group_id, unit_type):
         pass
 
 
@@ -62,6 +62,9 @@ class queryMongoStorage(queryCentralStorage):
         # TODO(andrew.oneill@nordstrom.com): make mongo config env vars
         self.db = self.client.test_database
         self.dataset = dataset
+
+    def get_exp_params_by_exp_name(self, exp_name):
+        pass
 
     def get_exps_params_by_group_id(self, group_id, unit_type):
         namespaces = self.db[self.dataset].find({

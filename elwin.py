@@ -42,7 +42,7 @@ def get_experiments_for_team():
 
     if not group_id:
         return "must supply group-id", 400
-    
+
     if len(request.args) == 1:
         return "must supply other params", 400
 
