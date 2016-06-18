@@ -5,7 +5,7 @@ concurrent experiments.
 
 ```bash
 # for example if you were running a single color test that hashed on userid
-$ curl elwin.example.com/?group-id=team-name&userid=123456789
+$ curl "elwin.example.com/?group-id=team-name&userid=123456789"
 {
   experiments: {
     colorTest: {
@@ -43,7 +43,7 @@ docker run -d \
   -p 5000:5000 \
   --link mdb:elwin-storage \
   foolusion/elwin
-curl localhost:5000/?group-id=epe&userid=12345789
+curl "localhost:5000/?group-id=epe&userid=12345789"
 ```
 
 ## Running in virtualenv
