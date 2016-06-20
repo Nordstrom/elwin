@@ -54,8 +54,7 @@ def get_experiments_for_team():
     except Exception, e:
         return jsonify({"error": str(e)}), 500
     else:
-        out_dict = {}
-        out_dict["experiments"] = exps
+        out_dict = {"experiments": exps}
         return jsonify(out_dict), 200
 
 @app.route("/healthz")
