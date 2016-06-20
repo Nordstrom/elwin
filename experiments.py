@@ -42,7 +42,20 @@ class Experiments:
         self.storage = queryMongoStorage(host, 'test')
 
     def get_experiment_params_for_team(self, team_name, args):
-        """Get experiment params for a given team and unit type."""
+        """Get experiment params for a given team and unit type.
+
+        get_experiment_params_for_team checks the storage and gets all matching
+        experiments for the given group-id and units.
+
+        Args:
+            team_name string: group-id to search for.
+            args ImmutableDict: the query params to use as units and inputs.
+        Returns:
+            A dict of experiments.
+        Throws:
+            ValueError if no experiments are found.
+        """
+
         units = [u for u in args.keys() if u != "group-id"]
         namespaces = self.storage.get_exps_params_by_group_id(team_name, units)
         res = {}
