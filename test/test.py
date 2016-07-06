@@ -44,7 +44,7 @@ csc.add_experiment('test', 'snb-1', 'searchResultTest', 1000, {
                 "op": "uniformChoice",
                 "unit": {
                     "op": "get",
-                    "var": "unit"
+                    "var": "userid"
                 }
             },
             "var": "resultCount"

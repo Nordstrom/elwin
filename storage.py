@@ -58,7 +58,7 @@ class queryMongoStorage(queryCentralStorage):
     __metaclass__ = ABCMeta
 
     def __init__(self, path, dataset):
-        self.client = MongoClient(path)
+        self.client = MongoClient(path, connect=False)
         # TODO(andrew.oneill@nordstrom.com): make mongo config env vars
         self.db = self.client.test_database
         self.dataset = dataset

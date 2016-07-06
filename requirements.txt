@@ -1,9 +1,11 @@
-Flask==0.10.1
-futures==3.0.5
-gunicorn==19.4.5
+click==6.6
+Flask==0.11.1
 itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
-PlanOut==0.5
+PlanOut==0.6.0
 pymongo==3.2.2
-Werkzeug==0.11.5
+six==1.10.0
+uWSGI==2.0.13.1
+Werkzeug==0.11.10
+wheel==0.24.0

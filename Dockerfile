@@ -18,6 +18,13 @@ WORKDIR /usr/src/app
 COPY requirements.txt /usr/src/app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /usr/src/app
+# TODO: eventually will want to run this as non root user
+# RUN groupadd -r elwin && useradd -u 999 -r -g elwin x7qj
+# USER x7qj
+# WORKDIR /home/elwin
+COPY elwin.py elwin.py
+COPY experiments.py experiments.py
+COPY storage.py storage.py
+
 EXPOSE 5000
-CMD ["/usr/local/bin/gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "--threads", "8", "elwin:app"]
+CMD ["/usr/local/bin/uwsgi", "--processes", "4", "--threads", "8", "--socket", "0.0.0.0:5000", "--wsgi-file", "/usr/src/app/elwin.py", "--callable", "app"]
