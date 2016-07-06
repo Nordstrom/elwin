@@ -40,6 +40,7 @@ var config = struct {
 }{
 	rate:     100,
 	duration: time.Minute,
+	target:   "/targets.txt",
 	key:      "elwin/perf.json",
 }
 
@@ -71,10 +72,15 @@ func main() {
 		config.key = os.Getenv("KEY")
 	}
 
-	targeter := vegeta.NewStaticTargeter(vegeta.Target{
-		Method: "GET",
-		URL:    config.target,
-	})
+	f, err := os.Open(config.target)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	targeter, err := vegeta.NewEagerTargeter(f, nil, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	attacker := vegeta.NewAttacker()
 
@@ -108,7 +114,7 @@ func main() {
 		Body:   bytes.NewReader(buf.Bytes()),
 	}
 
-	_, err := svc.PutObject(params)
+	_, err = svc.PutObject(params)
 	if err != nil {
 		log.Fatal(err)
 	}
