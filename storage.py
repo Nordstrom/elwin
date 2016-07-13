@@ -12,11 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import json
-from bson import BSON, json_util
-from pymongo import MongoClient
+import collections
+import functools
+import time
 from abc import ABCMeta, abstractmethod
+from pymongo import MongoClient
 
+CachedValue = collections.namedtuple('CachedValue', ['namespaces', 'time'])
+
+def memoize(obj):
+    cache = obj.cache = {}
+
+    @functools.wraps(obj)
+    def memoizer(*args, **kwargs):
+        key = str(args) + str(kwargs)
+        if key not in cache or cache[key].time < time.time():
+            cache[key] = CachedValue(obj(*args, **kwargs), time=time.time()+900)
+        return cache[key].namespaces
+    return memoizer
 
 class queryCentralStorage(object):
     __metaclass__ = ABCMeta
@@ -66,6 +79,7 @@ class queryMongoStorage(queryCentralStorage):
     def get_exp_params_by_exp_name(self, exp_name):
         pass
 
+    @memoize
     def get_exps_params_by_group_id(self, group_id, unit_type):
         namespaces = self.db[self.dataset].find({
             "group_ids": group_id,
@@ -77,4 +91,5 @@ class queryMongoStorage(queryCentralStorage):
                     }
                 }
             })
-        return (ns for ns in namespaces if ns['experiments'])
+        return [ns for ns in namespaces if ns['experiments']]
+
