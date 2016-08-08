@@ -1,5 +1,7 @@
 # elwin
 
+Checkout [choices][choices] our simpler/faster impementation.
+
 Elwin is [planout][planout] as a service. It provides an easy way to run many
 concurrent experiments.
 
@@ -61,6 +63,7 @@ DB_CONN=mongodb://your-mongo-database:27017 venv/bin/gunicorn myapp:application
 
 Elwin is a [philologist](https://en.wikipedia.org/wiki/Philology).
 
+[choices]: https://github.com/foolusion/choices
 [planout]: http://facebook.github.io/planout
 [ns]: http://facebook.github.io/planout/docs/namespaces.html
 [unit]: http://facebook.github.io/planout/docs/planout-language-reference.html#planout-syntax-and-operators
